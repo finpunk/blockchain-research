@@ -1,0 +1,104 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   		% ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{lscape}
+\usepackage{amsmath}
+\usepackage{csquotes}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{rotating}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{bigstrut}
+\usepackage{booktabs,caption,fixltx2e}
+\usepackage[flushleft]{threeparttable}
+\usepackage{enumitem}
+
+
+
+\title{Bonus Mining Reward to Incentivize Processing Many Input Transactions for the Zen Blockchain \\ }
+\author{Zen Blockchain Foundation \\ Engineering Team}
+\date{May 2018}							% Activate to display a given date or no date
+
+
+\begin{document}
+\maketitle
+\vspace{75 mm}
+%\section{Abstract}
+\begin{abstract}
+
+\end{abstract}
+This paper proposes a temporary reward mechanism to induce miners to include large transactions with many inputs into blocks. Zen is currently experiencing a quadratic scaling issue limiting large transaction throughput for which this reward system is one of several mitigating solutions. The basis for the reward program is to provide a mining subsidy that is fair, effective, and low risk. The method exploits the quadratic computational form for the marginal reward for any given transaction. We impose constraints to limit risk and bound possible exploits so that we can achieve a competitive equilibrium. The system is off-chain and flexible so that we can quickly pivot if results prove contrary to expectations. 
+
+\newpage
+\section{Introduction}
+The Zen blockchain has a quadratic scaling issue in that simultaneous processesing of transactions with many inputs by miners has been found to lock up the $zend$ daemon. As a response to this locking issue, several mining pools have chosen to restrict the number of transactions they will include in $getblocktemplate()$ and thus are inadvertently severely restricting chain throughput. Transactions with many inputs are often stuck in the $mempool$ for unacceptably long periods before being added to blocks.    
+
+The Zen team is developing a multi-pronged strategy to alleviate this congestion, make the blockchain much faster, and to incentivize miners to include transactions with many inputs into blocks. This paper proposes a reward mechanism to employ in conjunction with planned engineering improvements, such as caching to decrease hash computation requirements, and a much more efficient restriction parameter for miners to use instead of restricting the number of transactions per block or inputs per transaction. 
+
+
+\vspace{10 mm}
+\section{Proposed Method}
+Our purpose is to set an initial and temporary method to reward miners for including transactions with many inputs into blocks. This program is meant to be a transition from the current state where large transactions and those with many inputs are left remaining in the $mempool$ for unacceptably long periods. This is an initial specification for what we think will be a fair, effective, and low risk rewards program to alleviate network congestion. 
+
+All transactions that meet the following requirements will be counted towards rewards:
+\begin{itemize}
+	\item $tx_{i} \in$ \textit{mempool}, transaction verified in mempool
+	\item $n_{i} > n_{min}$, set minimum number of inputs to count towards reward
+	\item $f_{i} > f_{min}$, set a minimum fee for transaction to be counted
+	\item $n_{q}$ = $\{n_{min} : \mu_{n} + \sigma_{n}\}$, restrict the input computation range for tractability
+\end{itemize}
+
+Let $x_{i} = n_{q}^{2} | (tx \in \text{\textit{mempool}} \cap n_{i} > n_{min} \cap f_{i} > f_{min})$ be the marginal contribution towards reward from a qualifying transaction comprised of $n_{q}$ inputs conditional on all of the requirements being met for inclusion. We'll restrict $n_{q}$ to the range $\{n_{min} : \mu_{n} + \sigma_{n}\}$ to bound the marginal reward contribution in such a way that's responsive to the full transaction set by employing a ceiling of the population mean ($\mu_{n}$) plus its standard deviation ($\sigma_{n}$). 
+
+Next we define a reward process:
+\begin{enumerate}
+	\item Every week we build a list of coinbase addresses.
+	\item Compute the reward per address as follows:
+\end{enumerate}
+
+\[
+	b_{a} = \frac{R}{\sum_{i} x_{i} | tx_{i} \text{qualifies}}
+\]
+Where $b_{a}$ is the reward to address $a$, and $R$ is the total amount reserved for the reward program. 
+
+\begin{enumerate}[resume]
+	\item Distribute rewards weekly in combination with secure node payments. 
+\end{enumerate}
+
+By design this program is being implemented off-chain so that it is flexible and can be rapidly modified if results are suboptimal. Initial parameters will be informed by the distributional properties of actual transaction data. 
+
+\vspace{10 mm}
+\section{Data and Descriptive Statistics}
+. 
+
+
+
+\vspace{10 mm}
+\section{Conclusion}
+
+
+
+
+
+
+%Bibliography
+\clearpage
+\newpage
+\begin{thebibliography}{9}
+
+%\bibitem{Bhatt_Thakor} Bhattacharya, S., \& Thakor, A. V. (1993). Contemporary banking theory. \emph{Journal of financial Intermediation}, 3(1), 2-50.
+
+
+\end{thebibliography}
+
+
+
+
+\end{document}  
